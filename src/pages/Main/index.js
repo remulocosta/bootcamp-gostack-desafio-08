@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FlatList } from 'react-native';
 import PropTypes from 'prop-types';
 
@@ -23,65 +23,54 @@ import {
 import api from '../../services/api';
 import { formatPrice } from '../../util/format';
 
-class Main extends Component {
-  state = {
-    products: [],
-  };
+function Main({ amount, addToCartRequest }) {
+  const [products, setProducts] = useState([]);
 
-  componentDidMount() {
-    this.getProducts();
-  }
+  useEffect(() => {
+    async function LoandProducts() {
+      const response = await api.get('/products');
 
-  getProducts = async () => {
-    const response = await api.get('/products');
+      const data = response.data.map(product => ({
+        ...product,
+        priceFormatted: formatPrice(product.price),
+      }));
 
-    const data = response.data.map(product => ({
-      ...product,
-      priceFormatted: formatPrice(product.price),
-    }));
+      setProducts(data);
+    }
 
-    this.setState({ products: data });
-  };
+    LoandProducts();
+  }, []);
 
-  handleAddProduct = id => {
-    const { addToCartRequest } = this.props;
-
+  function handleAddProduct(id) {
     addToCartRequest(id);
-  };
-
-  render() {
-    const { products } = this.state;
-    const { amount } = this.props;
-
-    return (
-      <Container>
-        <>
-          <FlatList
-            horizontal
-            data={products}
-            extraData={this.props}
-            keyExtractor={item => String(item.id)}
-            renderItem={({ item }) => (
-              <Product key={item.id}>
-                <ProductImage source={{ uri: item.image }} />
-                <ProductTitle>{item.title}</ProductTitle>
-                <ProductPrice>{item.priceFormatted}</ProductPrice>
-                <AddButton onPress={() => this.handleAddProduct(item.id)}>
-                  <ProductAmount>
-                    <Icon name="add-shopping-cart" color="#FFF" size={20} />
-                    <ProductAmountText>
-                      {amount[item.id] || 0}
-                    </ProductAmountText>
-                  </ProductAmount>
-                  <AddButtonText>ADICIONAR</AddButtonText>
-                </AddButton>
-              </Product>
-            )}
-          />
-        </>
-      </Container>
-    );
   }
+
+  return (
+    <Container>
+      <>
+        <FlatList
+          horizontal
+          data={products}
+          extraData={products}
+          keyExtractor={item => String(item.id)}
+          renderItem={({ item }) => (
+            <Product key={item.id}>
+              <ProductImage source={{ uri: item.image }} />
+              <ProductTitle>{item.title}</ProductTitle>
+              <ProductPrice>{item.priceFormatted}</ProductPrice>
+              <AddButton onPress={() => handleAddProduct(item.id)}>
+                <ProductAmount>
+                  <Icon name="add-shopping-cart" color="#FFF" size={20} />
+                  <ProductAmountText>{amount[item.id] || 0}</ProductAmountText>
+                </ProductAmount>
+                <AddButtonText>ADICIONAR</AddButtonText>
+              </AddButton>
+            </Product>
+          )}
+        />
+      </>
+    </Container>
+  );
 }
 
 Main.navigationOptions = {
