@@ -31,7 +31,7 @@ export default function Main() {
     }, {})
   );
 
-  const dispach = useDispatch();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     async function LoandProducts() {
@@ -49,7 +49,7 @@ export default function Main() {
   }, []);
 
   function handleAddProduct(id) {
-    dispach(CartActions.addToCartRequest(id));
+    dispatch(CartActions.addToCartRequest(id));
   }
 
   return (
