@@ -35,28 +35,6 @@ import {
 } from './styles';
 
 function Cart({ products, total, removeFromCart, updateAmountRequest }) {
-  // const Uproducts = [
-  //   {
-  //     id: 1,
-  //     image:
-  //       'https://static.netshoes.com.br/produtos/kit-3-pares-de-sapatenis-sapatofran-sw-masculino/56/HAP-0151-256/HAP-0151-256_detalhe2.jpg?ims=326x',
-  //     title:
-  //       'Kit 3 Pares de Sapatênis SapatoFran SW Masculino - Preto e Marrom',
-  //     priceFormatted: 'R$ 123,00',
-  //     amount: 2,
-  //     subtotal: 'R$ 256,00',
-  //   },
-  //   {
-  //     id: 2,
-  //     image:
-  //       'https://static.netshoes.com.br/produtos/sapatenis-polo-joy-confortavel-masculino/78/FSO-0059-178/FSO-0059-178_detalhe2.jpg?ims=326x',
-  //     title: 'Sapatênis Polo Joy Confortável Masculino - Preto e Amarelo',
-  //     priceFormatted: 'R$ 122,00',
-  //     amount: 2,
-  //     subtotal: 'R$ 254,00',
-  //   },
-  // ];
-
   function decrement(product) {
     updateAmountRequest(product.id, product.amount - 1);
   }
@@ -151,4 +129,7 @@ Cart.propTypes = {
 const mapDispatchToProps = dispatch =>
   bindActionCreators(CartActions, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(Cart);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Cart);
