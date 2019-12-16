@@ -4,7 +4,7 @@ import colors from '../../styles/colors';
 
 export const Container = styled.View`
   flex: 1;
-  background: ${colors.dark};
+  background: #21232c;
   flex-direction: row;
 `;
 
